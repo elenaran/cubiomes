@@ -307,7 +307,7 @@ void octaveInit(OctaveNoise *noise, uint64_t *seed, PerlinNoise *octaves,
     int i;
     int end = omin+len-1;
     double persist = 1.0 / ((1LL << len) - 1.0);
-    double lacuna = pow(2.0, end);
+    double lacuna = ldexp(1.0, end);
 
     if (len < 1 || end > 0)
     {
@@ -348,7 +348,7 @@ void xOctaveLegacyInit(OctaveNoise *noise, Xoroshiro *xr, PerlinNoise *octaves, 
     int i;
     int end = omin+len-1;
     double persist = 1.0 / ((1LL << len) - 1.0);
-    double lacuna = pow(2.0, end);
+    double lacuna = ldexp(1.0, end);
 
     if (len < 1 || end > 0)
     {
@@ -541,17 +541,6 @@ void doublePerlinInit(DoublePerlinNoise *noise, uint64_t *seed,
     octaveInit(&noise->octB, seed, octavesB, omin, len);
 }
 
-/**
- * Sets up a DoublePerlinNoise generator (MC 1.18+).
- * @noise:      Object to be initialized
- * @xr:         Xoroshiro random object
- * @octaves:    Octaves buffer, size has to be 2x (# non-zeros in amplitudes)
- * @amplitudes: Octave amplitude, needs at least one non-zero
- * @omin:       First octave
- * @len:        Length of amplitudes array
- * @nmax:       Number of octaves available in buffer (can be <=0 to ignore)
- * @return Number of octaves used (see octaves buffer size).
- */
 int xDoublePerlinInit(DoublePerlinNoise *noise, Xoroshiro *xr,
         PerlinNoise *octaves, const double *amplitudes, int omin, int len, int nmax)
 {
@@ -588,4 +577,3 @@ double sampleDoublePerlin(const DoublePerlinNoise *noise,
 
     return v * noise->amplitude;
 }
-

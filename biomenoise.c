@@ -778,7 +778,7 @@ int genEndScaled(const EndNoise *en, int *out, Range r, int mc, uint64_t sha)
             {
                 mapVoronoiPlane(
                     sha, out+r.sx*r.sz*iy, src,
-                    r.x,r.z,r.sx,r.sz, r.y+iy,
+                    r.x-2,r.z-2,r.sx,r.sz, r.y+iy-2,
                     s.x,s.z,s.sx,s.sz);
             }
             return 0; // 3D expansion is done => return
@@ -1194,7 +1194,7 @@ int sampleBiomeNoise(const BiomeNoise *bn, int64_t *np, int x, int y, int z,
     return id;
 }
 
-void sampleNoiseParameters(BiomeNoise *bn, int x, int z, float np_param[4]) {
+void sampleNoiseParameters(const BiomeNoise *bn, int x, int z, float np_param[4]) {
     double px = x + sampleDoublePerlin(&bn->climate[NP_SHIFT], x, 0, z) * 4.0;
     double pz = z + sampleDoublePerlin(&bn->climate[NP_SHIFT], z, x, 0) * 4.0;
 
@@ -2078,7 +2078,7 @@ void initBlendedNoise(BlendedNoise *bn, uint64_t ws, int dim)
     }
 }
 
-double sampleBase3dNoise(BlendedNoise *bn, int x, int y, int z)
+double sampleBase3dNoise(const BlendedNoise *bn, int x, int y, int z)
 {
     const double scaledX = x * bn->xzMultiplier;
     const double scaledY = y * bn->yMultiplier;
